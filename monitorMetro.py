@@ -35,7 +35,7 @@ def getStatus():
     result = client.service.GetSituacaoTodasLinhas('B7758201-15AF-4246-8892-EAAFFC170515')
     diretodometro = xmltodict.parse(result)['diretodometro']
     for linha in diretodometro['linhas']['linha']:
-        if 'Normal' in linha['situacao']:
+        if 'Normal' not in linha['situacao']:
             msg = '%s esta parada, buscando ultimas noticias sobre esta linha...' % linha['nome']
             query = '%s metrô São Paulo' % linha['nome']
             sendNotify(msg)
