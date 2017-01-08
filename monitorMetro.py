@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 import sys
 import telepot
@@ -13,9 +13,12 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 sched = BlockingScheduler()
+userID = ''
+apiTelegram = ''
+apiWebhose = ''
 
 def getNews(query):
-    url = 'https://webhose.io/search?token=apikey&format=json&q=%s' % query
+    url = 'https://webhose.io/search?token=%s&format=json&q=%s' % (apiWebhose,query)
     r = requests.get(url)
     news = r.json()['posts']
     for post in range(0,3):
@@ -23,11 +26,10 @@ def getNews(query):
         sendNotify(msg)
 
 def sendNotify(message):
-    userID = '00000000'
-    bot = telepot.Bot('APIKEY')
+    bot = telepot.Bot(apiTelegram)
     bot.sendMessage(userID, message)
 
-@sched.scheduled_job('interval', minutes=5)
+@sched.scheduled_job('interval', minutes=60)
 def getStatus():
     client = Client('http://apps.metrosp.com.br/api/diretodometro/v1/SituacaoLinhasMetro.asmx?WSDL')
     result = client.service.GetSituacaoTodasLinhas('B7758201-15AF-4246-8892-EAAFFC170515')
